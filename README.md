@@ -21,4 +21,4 @@ This is website where we can write a article ,save in database,edit or delete ex
 ![image](https://user-images.githubusercontent.com/87582335/176737899-3613e784-865d-4bd6-9c8d-68c8ddd160d4.png)
 ● We can see our newly created article,here we can edit,delete,update
 
-● TeckStack:PUG,CSS,JAVASCRIPT,BOOTSTRAP,
+

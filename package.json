@@ -1,0 +1,27 @@
+{
+  "name": "nodekb",
+  "version": "1.0.0",
+  "description": "Simple knowledgebase app",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "author": "Anurag Kumar",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.17.2",
+    "bower": "^1.8.14",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-messages": "^1.0.1",
+    "express-session": "^1.15.3",
+    "express-validator": "^3.2.0",
+    "mongoose": "^5.7.7",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pug": "^3.0.2"
+  }
+}

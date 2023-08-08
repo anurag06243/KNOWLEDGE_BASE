@@ -1,34 +1,34 @@
-const express=require('express');
-const path=require('path');
-const mongoose = require('mongoose');
-const bodyParser=require('body-parser');
-const expressValidator=require('express-validator');
-const flash=require('connect-flash');
-const session=require('express-session');
-const passport=require('passport');
-const config=require('./config/database');
+const express = require("express");
+const path = require("path");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const expressValidator = require("express-validator");
+const flash = require("connect-flash");
+const session = require("express-session");
+const passport = require("passport");
+const config = require("./config/database");
 
 mongoose.connect(config.database);
-let db=mongoose.connection;
+let db = mongoose.connection;
 
 //check for db error
-db.once('open',()=>{
-  console.log('connected to mongo db');
+db.once("open", () => {
+  console.log("connected to mongo db");
 });
-db.on('error',(err)=>{
+db.on("error", (err) => {
   console.log(err);
 });
 //init app
-const app=express();
+const app = express();
 
 //
 //bring in Models
-let Article=require('./models/article');
+let Article = require("./models/article");
 //
 //
 //load view engine
-app.set('views',path.join(__dirname,'views'));
-app.set('view engine','pug');
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "pug");
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -37,67 +37,70 @@ app.use(bodyParser.json());
 
 //
 //set public folder
-app.use(express.static(path.join(__dirname, 'public')));//__ cureeent directory
+app.use(express.static(path.join(__dirname, "public"))); //__ current directory
 //
 //Express session MIddleware\
-app.use(session({
-  secret: 'keyboard cat',
-  resave: true,
-  saveUninitialized: true
-  // cookie: { secure: true}
-}));
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: true,
+    saveUninitialized: true,
+    // cookie: { secure: true}
+  })
+);
 
 // Express message middleware,,....
-app.use(require('connect-flash')());
-app.use(function(req, res, next){
-  res.locals.messages=require('express-messages')(req,res);
+app.use(require("connect-flash")());
+app.use(function (req, res, next) {
+  res.locals.messages = require("express-messages")(req, res);
   next();
 });
 //
 //
 //Express validator middleware
-app.use(expressValidator({
-  errorFormatter:function(param, msg, value){
-    var namespace = param.split('.')
-    , root = namespace.shift()
-    , formParam= root;
+app.use(
+  expressValidator({
+    errorFormatter: function (param, msg, value) {
+      var namespace = param.split("."),
+        root = namespace.shift(),
+        formParam = root;
 
-    while(namespace.length){
-      formParam += '['+ namespace.shift() + ']';
-    }
-    return{
-      param : formParam,
-      msg : msg,
-      value : value
-    };
-  }
-}));
+      while (namespace.length) {
+        formParam += "[" + namespace.shift() + "]";
+      }
+      return {
+        param: formParam,
+        msg: msg,
+        value: value,
+      };
+    },
+  })
+);
 
 //...............................................passport config....................
-require('./config/passport')(passport);
+require("./config/passport")(passport);
 
 //passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 //..........................................log out function..............................
-app.get('*',function(req,res,next){
-  res.locals.user=req.user||null;
+app.get("*", function (req, res, next) {
+  res.locals.user = req.user || null;
   next();
 });
 //...........................................home route...................................
 // home route
-app.get('/',function(req,res){
-   Article.find({}, function(err,articles){
-     if(err){
-       consle.log(err);
-     }
-     else{
-       res.render('index',{
-         title:'Articles',
-         articles:articles
-       });
-     }
-   });
+app.get("/", function (req, res) {
+  Article.find({}, function (err, articles) {
+    if (err) {
+      consle.log(err);
+    } else {
+      res.render("index", {
+        title: "Articles",
+        articles: articles,
+      });
+    }
+  });
 });
 
 //................................AFTER THIS ALL ARE COPIED TO ARTICLE.JS.............................................
@@ -205,16 +208,16 @@ app.get('/',function(req,res){
 
 //..............................................ROUTE FILES ANYTHING GO TO /articles will go to article.js file//users.js file..................................................
 
-let articles = require('./routes/articles');
-let users = require('./routes/users');
-app.use('/articles', articles);
-app.use('/users', users);
+let articles = require("./routes/articles");
+let users = require("./routes/users");
+app.use("/articles", articles);
+app.use("/users", users);
 //.................................................................................
-app.get('/',function(req,res){
-  res.render('index',{
-    title:'Articles'
+app.get("/", function (req, res) {
+  res.render("index", {
+    title: "Articles",
   });
 });
-app.listen(3000,function(){
-  console.log('server started on port 3000.....');
+app.listen(3000, function () {
+  console.log("server started on port 3000.....");
 });
